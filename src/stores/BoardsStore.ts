@@ -1,16 +1,31 @@
 import { defineStore } from "pinia";
-import { useDeskree } from "@/composables/useDeskree";
+import dataDriver from "@/dataDrivers/dataDriver";
+import type { Board } from "@/types";
 
-const { getBoards } = useDeskree();
 export const useBoardsStore = defineStore({
   id: "boardsStore",
-  state: () => ({
+  state: (): {
+    boards: Board[];
+  } => ({
     boards: [],
   }),
   actions: {
     async initBoards() {
-      const res = await getBoards();
-      this.boards = res.data;
+      this.boards = await dataDriver.getBoards();
+    },
+    async createNew() {
+      const newBoard = await dataDriver.createBoard({
+        title: "My New Board",
+        order: [
+          {
+            uid: "1",
+            title: "Backlog",
+            taskUids: [],
+          },
+        ],
+      });
+      this.boards.push(newBoard);
+      return newBoard;
     },
   },
 });

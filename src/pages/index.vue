@@ -1,20 +1,27 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { useRouter } from "vue-router";
 import { useBoardsStore } from "@/stores/BoardsStore";
+import BoardCard from "@/components/BoardCard.vue";
 const boardStore = useBoardsStore();
+const router = useRouter();
 boardStore.initBoards();
+
+async function createNewBoard() {
+  const board = await boardStore.createNew();
+  router.push(`/boards/${board.uid}?new=1`);
+}
 </script>
 
 <template>
-  <div>
-    <router-link
+  <h1 class="text-3xl mt-10 p-5">Boards</h1>
+  <div class="flex">
+    <BoardCard
       v-for="board in boardStore.boards"
       :key="board.uid"
-      :to="`/better/${board.uid}`"
-      class="text-lg"
-    >
-      {{ board.attributes.name }}
-    </router-link>
+      :board="board"
+    />
+
+    <button class="text-gray-500" @click="createNewBoard">New Board +</button>
   </div>
 </template>
 

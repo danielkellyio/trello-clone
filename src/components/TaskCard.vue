@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import Badge from "./Badge.vue";
+import { computed } from "vue";
+import { useDateFormat } from "@vueuse/core";
+import type { Task } from "@/types";
+const props = defineProps<{
+  task: Task;
+}>();
+const date = useDateFormat(props.task.date, "MM/DD/YY");
+const badgeColor = computed(() => {
+  const mappings = {
+    Design: "purple",
+    "Feature Request": "teal",
+    Backend: "blue",
+    QA: "green",
+    default: "teal",
+  };
+  return mappings[props.task.type] || mappings.default;
+});
+</script>
 <template>
   <div
     class="bg-white shadow rounded px-3 pt-3 pb-5 border border-white relative"
@@ -19,34 +39,10 @@
       />
     </div>
     <div class="flex mt-4 justify-between items-center">
-      <span class="text-sm text-gray-600">{{ task.date }}</span>
-      <badge v-if="task.type" :color="badgeColor">{{ task.type }}</badge>
+      <span class="text-sm text-gray-600">{{ date }}</span>
+      <badge v-if="task.type" :color="badgeColor">{{
+        task.type === "default" ? "" : task.type
+      }}</badge>
     </div>
   </div>
 </template>
-<script>
-import Badge from "./Badge.vue";
-export default {
-  components: {
-    Badge,
-  },
-  props: {
-    task: {
-      type: Object,
-      default: () => ({}),
-    },
-  },
-  computed: {
-    badgeColor() {
-      const mappings = {
-        Design: "purple",
-        "Feature Request": "teal",
-        Backend: "blue",
-        QA: "green",
-        default: "teal",
-      };
-      return mappings[this.task.type] || mappings.default;
-    },
-  },
-};
-</script>

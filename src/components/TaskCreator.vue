@@ -34,6 +34,7 @@ const handleEsc = () => {
       v-model="value"
       @keypress.enter="handleEnter"
       @keypress.esc="handleEsc"
+      @blur="handleEsc"
     />
     <div
       v-else

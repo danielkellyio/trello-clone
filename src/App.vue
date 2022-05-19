@@ -7,7 +7,7 @@
 </template>
 <style scoped>
 .container {
-  max-width: 960px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 </style>

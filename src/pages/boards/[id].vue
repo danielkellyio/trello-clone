@@ -1,109 +1,113 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import draggable from "vuedraggable";
-import { useBoardStore } from "@/stores/BoardStore";
-
+import TaskCard from "@/components/TaskCard.vue";
+import { useRoute, useRouter } from "vue-router";
+import { onMounted, ref } from "vue";
+import { useBoardStore } from "../../stores/BoardStore";
+import TaskCreator from "../../components/TaskCreator.vue";
 const props = defineProps<{
   id: string;
 }>();
-
-// init data
-const { createColumn, createIssue, deleteIssue, updateOrder, deleteColumn } =
-  useBoardStore();
+const route = useRoute();
+const router = useRouter();
 const board = useBoardStore();
 board.init(props.id);
+board.columns;
+const boardTitle = ref(null);
 
-watch(
-  () => board.order,
-  () => !board.order || updateOrder(),
-  { deep: true }
-);
+onMounted(() => {
+  route.query.new && boardTitle.value.focus();
+});
 
-// Handle creating new columns
-const newColumnName = ref("");
-const newColumnMode = ref(false);
-const handleNewColumn = async () => {
-  const newColumn = await createColumn({ title: newColumnName.value });
-  board.order.push([newColumn.uid, []]);
-  newColumnName.value = "";
-  newColumnMode.value = false;
-};
-const handleNewColumnCancel = () => {
-  newColumnMode.value = false;
-};
+function handleDelete() {
+  const yes = confirm(`Are you sure you want to delete ${board.title}`);
+  if (!yes) return;
+  board.deleteBoard();
+  router.push("/");
+}
 </script>
 <template>
-  <h1 style="padding: 20px; margin-bottom: 0">{{ board.name }}</h1>
-  <span v-if="!board.loaded">Loading...</span>
-  <div class="q-pa-md row items-start q-gutter-md no-wrap" v-if="board.loaded">
-    <draggable
-      :list="board.order"
-      group="columns"
-      itemKey="uid"
-      class="columns"
-      handle=".handle"
-    >
-      <template #item="{ element: [columnId, issueIds] }">
-        <div style="padding: 20px">
-          <h6 class="handle">
-            {{ board.columns.find((c) => c.uid === columnId)?.title }}
-            <span @click="deleteColumn(columnId)">x</span>
-          </h6>
-          <draggable
-            class="list-group"
-            :list="issueIds"
-            group="issues"
-            itemKey="uid"
+  <div>
+    <div class="mt-10 p-5">
+      <input
+        ref="boardTitle"
+        type="text"
+        class="text-3xl"
+        :value="board.title"
+        @keydown.enter="board.renameBoard(($event.target as HTMLInputElement).value); ($event.target as HTMLInputElement).blur()"
+        @blur="board.renameBoard(($event.target as HTMLInputElement).value); ($event.target as HTMLInputElement).blur()"
+      />
+      <br />
+      <RouterLink to="/" class="text-blue-500">←Back</RouterLink>
+      |
+      <button class="text-red-500" @click="handleDelete">Delete</button>
+    </div>
+
+    <div class="flex py-12 items-start">
+      <draggable
+        :list="board.columns"
+        group="columns"
+        item-key="id"
+        class="flex overflow-x-scroll flex-grow-0 flex-shrink-0"
+      >
+        <template #item="{ element: column }">
+          <div
+            class="column bg-gray-100 flex flex-col justify-between rounded-lg px-3 py-3 rounded mr-4 w-[300px]"
           >
-            <template #item="{ element: issueId }">
-              <QCard dark bordered class="bg-grey-9 my-card">
-                <QCardSection>
-                  <div style="display: flex; justify-content: space-between">
-                    <span>{{
-                      board.issues.find((i) => i.uid === issueId)?.title
-                    }}</span>
-                    <span @click="deleteIssue(issueId)">x</span>
-                  </div>
-                </QCardSection>
-              </QCard>
-            </template>
-
-            <template #header>
-              <div v-if="!issueIds.length">empty</div>
-            </template>
-
-            <template #footer>
-              <input
-                type="text"
-                placeholder="New Issue"
-                @keypress.enter=" createIssue({ 
-                  title:($event.target as HTMLInputElement).value, 
-                  columnId, 
-                  createdBy: '0yLdHPMeBUSpwGlQtXr3' 
-                }); ($event.target as HTMLInputElement).value = ''"
-              />
-            </template>
-          </draggable>
-        </div>
-      </template>
-    </draggable>
-    <div style="padding: 20px">
-      <h6 class="ellipsis">
-        <input
-          v-if="newColumnMode"
-          type="text"
-          v-model="newColumnName"
-          @keyup.enter="handleNewColumn"
-          @keyup.esc="handleNewColumnCancel"
-        />
-        <div v-else @click="newColumnMode = true">+ Add New Column</div>
-      </h6>
+            <div>
+              <p
+                class="text-gray-700 font-semibold font-sans tracking-wide text-sm cursor-move"
+              >
+                <input
+                  type="text"
+                  class="bg-transparent font-bold ouline-none border-none"
+                  @blur="
+                  board.renameColumn({
+                        uid: column.uid,
+                        title: ($event.target as HTMLInputElement).value,
+                      });
+                      ($event.target as HTMLInputElement).blur()
+                  "
+                  @keypress.enter="
+                      board.renameColumn({
+                        uid: column.uid,
+                        title: ($event.target as HTMLInputElement).value,
+                      });
+                      ($event.target as HTMLInputElement).blur()
+                    "
+                  :value="column.title"
+                />
+              </p>
+              <draggable
+                :list="column.tasks"
+                group="tasks"
+                item-key="uid"
+                :animation="200"
+                ghost-class="ghost-card"
+                class="min-h-[400px]"
+              >
+                <template #item="{ element: task }">
+                  <task-card
+                    :task="task"
+                    class="mt-3 cursor-move"
+                    @delete="board.deleteTask(task.uid)"
+                  ></task-card>
+                </template>
+              </draggable>
+            </div>
+            <TaskCreator
+              @create="
+                board.createIssue({
+                  columnUid: column.uid,
+                  title: $event,
+                })
+              "
+            />
+          </div>
+        </template>
+      </draggable>
+      <button class="text-gray-500" @click="board.createColumn">
+        New Column +
+      </button>
     </div>
   </div>
 </template>
-
-<style>
-.columns {
-  display: flex;
-}
-</style>
