@@ -13,16 +13,19 @@ async function createNewBoard() {
 </script>
 
 <template>
-  <h1 class="text-3xl mt-10 p-5">Boards</h1>
-  <div class="flex">
-    <BoardCard
-      v-for="board in boardStore.boards"
-      :key="board.uid"
-      :board="board"
-    />
+  <div v-if="boardStore.loaded">
+    <h1 class="text-3xl mt-10 p-5">Boards</h1>
+    <div class="flex">
+      <BoardCard
+        v-for="board in boardStore.boards"
+        :key="board.uid"
+        :board="board"
+      />
 
-    <button class="text-gray-500" @click="createNewBoard">New Board +</button>
+      <button class="text-gray-500" @click="createNewBoard">New Board +</button>
+    </div>
   </div>
+  <div v-if="!boardStore.loaded">Loading...</div>
 </template>
 
 <style scoped></style>

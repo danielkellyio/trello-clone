@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import TaskCard from "@/components/TaskCard.vue";
 import { useRoute, useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useBoardStore } from "../../stores/BoardStore";
 import TaskCreator from "../../components/TaskCreator.vue";
 const props = defineProps<{
@@ -14,19 +14,21 @@ board.init(props.id);
 board.columns;
 const boardTitle = ref(null);
 
-onMounted(() => {
-  route.query.new && boardTitle.value.focus();
-});
+onMounted(focusTitle);
+watch(board.loaded, focusTitle);
 
-function handleDelete() {
+function focusTitle() {
+  route.query.new && boardTitle.value && boardTitle.value.focus();
+}
+async function handleDelete() {
   const yes = confirm(`Are you sure you want to delete ${board.title}`);
   if (!yes) return;
-  board.deleteBoard();
+  await board.deleteBoard();
   router.push("/");
 }
 </script>
 <template>
-  <div>
+  <div v-if="board.loaded">
     <div class="mt-10 p-5">
       <input
         ref="boardTitle"
@@ -110,4 +112,5 @@ function handleDelete() {
       </button>
     </div>
   </div>
+  <div v-if="!board.loaded">Loading...</div>
 </template>

@@ -1,5 +1,16 @@
 export type Uid = string | number;
 
+export interface EmailAndPassword {
+  email: string;
+  password: string;
+}
+
+export interface ResetPasswordPayload {
+  oobCode: string;
+  uid: Uid;
+  newPassword: string;
+}
+
 export type TaskTypes =
   | "Design"
   | "Feature Request"

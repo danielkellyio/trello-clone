@@ -6,12 +6,16 @@ export const useBoardsStore = defineStore({
   id: "boardsStore",
   state: (): {
     boards: Board[];
+    loaded: boolean;
   } => ({
     boards: [],
+    loaded: false,
   }),
   actions: {
     async initBoards() {
+      this.loaded = false;
       this.boards = await dataDriver.getBoards();
+      this.loaded = true;
     },
     async createNew() {
       const newBoard = await dataDriver.createBoard({

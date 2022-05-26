@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 const BOARDS_KEY = "app_boards";
 const TASK_KEY = "app_tasks";
 export default {
+  // Boards CRUD
   async getBoards(): Promise<Board[]> {
     const boards = window.localStorage.getItem(BOARDS_KEY);
     if (boards) return JSON.parse(boards);
@@ -40,6 +41,8 @@ export default {
     boards.splice(index, 1);
     window.localStorage.setItem(BOARDS_KEY, JSON.stringify(boards));
   },
+
+  // Tasks CRUD
   async getTasks(boardUid?: Uid): Promise<Task[]> {
     const data = window.localStorage.getItem(TASK_KEY);
     if (data) {
