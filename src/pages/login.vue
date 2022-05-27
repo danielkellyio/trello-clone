@@ -1,6 +1,10 @@
 <script setup lang="ts">
+import dataDriver from "@/dataDrivers/dataDriver";
 import { ref } from "vue";
 import { useAuthUserStore } from "@/stores/AuthUserStore";
+
+dataDriver.visitLogin && dataDriver.visitLogin();
+
 const auth = useAuthUserStore();
 const form = ref({
   email: "",

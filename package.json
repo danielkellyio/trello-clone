@@ -10,12 +10,12 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "@apollo/client": "^3.6.2",
+    "@apollo/client": "^3.6.5",
     "@quasar/extras": "^1.13.6",
     "@vue/apollo-composable": "^4.0.0-alpha.17",
     "@vueuse/core": "^8.4.2",
     "8base-sdk": "^1.6.2",
-    "graphql": "^16.4.0",
+    "graphql": "^16.5.0",
     "graphql-tag": "^2.12.6",
     "i": "^0.3.7",
     "jwt-decode": "^3.1.2",
@@ -23,6 +23,7 @@
     "npm": "^8.9.0",
     "pinia": "^2.0.13",
     "quasar": "^2.6.6",
+    "react": "^18.1.0",
     "uuid": "^8.3.2",
     "vue": "^3.2.33",
     "vue-router": "latest",

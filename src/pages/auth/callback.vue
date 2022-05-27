@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useAuthUserStore } from "@/stores/AuthUserStore";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@vue/apollo-composable";
@@ -7,42 +7,43 @@ import jwt_decode from "jwt-decode";
 
 const authUserStore = useAuthUserStore();
 const route = useRoute();
+const router = useRouter();
 const searchParams = new URLSearchParams(route.hash.substring(1));
 authUserStore.idToken = searchParams.get("id_token");
 const user = jwt_decode(authUserStore.idToken);
 
-const CHARACTERS_QUERY = gql`
-  query {
-    user {
-      id
+async function storeUser() {
+  const res = await fetch(import.meta.env.VITE_APP_WORKSPACE_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${authUserStore.idToken}`,
+    },
+    body: JSON.stringify({
+      query: `mutation {
+  userSignUpWithToken(
+    authProfileId: "${import.meta.env.VITE_APP_AUTH_PROFILE_ID}"
+    user: {
+      email: "${user.email}",
+      lastName: "${user.family_name}",
+      firstName: "${user.name}",
     }
+  ) {
+    id
   }
-`;
+}
 
-const CREATE_USER_QUERY = gql`
-  mutation UserSignUp($user: UserCreateInput!, $authProfileId: ID) {
-    userSignUpWithToken(user: $user, authProfileId: $authProfileId) {
-      id
-      email
-    }
-  }
-`;
-
-const { result, loading, error, onError } = useQuery(CHARACTERS_QUERY);
-const { mutate: createUser } = useMutation(CREATE_USER_QUERY);
-
-onError((error) => {
-  if (error.toString() === "Error: User is absent") {
-    createUser({
-      authProfileId: authUserStore.idToken,
-      user: { email: user.email },
-    });
-  }
-});
+#`,
+    }),
+  });
+  authUserStore.user = await res.json();
+  router.push("/");
+}
+storeUser();
 </script>
 
 <template>
-  <div>{{ error }} {{ user.email }}</div>
+  <button @click="doTest">doTest</button>
 </template>
 
 <style scoped></style>
