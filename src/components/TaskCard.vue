@@ -6,7 +6,7 @@ import type { Task } from "@/types";
 const props = defineProps<{
   task: Task;
 }>();
-const date = useDateFormat(props.task.date, "MM/DD/YY");
+const date = useDateFormat(props.task?.date, "MM/DD/YY");
 const badgeColor = computed(() => {
   const mappings = {
     Design: "purple",

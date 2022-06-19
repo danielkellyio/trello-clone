@@ -43,11 +43,11 @@ export default {
   async getBoard(uid: Uid): Promise<Board> {
     const { onResult, onError } = await useQuery(
       gql`
-        query getBoardById($id: ID!) {
+        query getBoard($id: ID) {
           board(id: $id) {
+            id
             title
             order
-            id
           }
         }
       `,
@@ -57,6 +57,7 @@ export default {
     );
     return new Promise((resolve, reject) => {
       onResult((result) => {
+        console.log(result);
         resolve({
           ...result.data.board,
           order: JSON.parse(result.data.board.order),
@@ -70,7 +71,7 @@ export default {
   async updateBoard(uid: Uid, payload: PartialBoard) {
     const { onResult, onError } = await useQuery(
       gql`
-        mutation updateBoard($id: Id, $order: String!, $title: String!) {
+        mutation updateBoard($id: ID, $order: JSON, $title: String!) {
           boardUpdate(data: { id: $id, title: $title, order: $order }) {
             id
             title

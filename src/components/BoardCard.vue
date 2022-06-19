@@ -6,7 +6,7 @@ defineProps<{
 </script>
 <template>
   <router-link
-    :to="`/boards/${board.uid}`"
+    :to="`/boards/${board.id}`"
     class="bg-gray-100 shadow rounded p-5 border border-white relative block w-[200px] m-5"
   >
     <p class="text-gray-700 font-semibold font-sans tracking-wide text-lg">

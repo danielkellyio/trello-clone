@@ -8,9 +8,9 @@ import {
 const httpLink = createHttpLink({
   // You should use an absolute URL here
   uri: import.meta.env.VITE_APP_WORKSPACE_ENDPOINT,
-  headers: {
-    authorization: `Bearer ${localStorage.getItem("8BaseIdToken")}`,
-  },
+  // headers: {
+  //   authorization: `Bearer ${localStorage.getItem("8BaseIdToken")}`,
+  // },
 });
 
 // Cache implementation

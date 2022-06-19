@@ -19,11 +19,10 @@ export type TaskTypes =
   | "default";
 
 export interface Task {
-  uid: Uid;
-  boardUid: Uid;
+  id: Uid;
   title: string;
   type: string;
-  date: Date;
+  board?: Board;
 }
 export interface Column {
   uid: Uid;
@@ -36,8 +35,8 @@ export interface ColumnWithTasks extends Column {
 
 export interface Board {
   title: string;
-  uid: Uid;
-  order: Column[] | ColumnWithTasks[];
+  id: Uid;
+  order: string | Column[] | ColumnWithTasks[];
 }
 
 export interface PartialBoard {
