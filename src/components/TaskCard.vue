@@ -28,9 +28,12 @@ const badgeColor = computed(() => {
       >x</span
     >
     <div class="flex justify-between">
-      <p class="text-gray-700 font-semibold font-sans tracking-wide text-sm">
+      <router-link
+        :to="`/tasks/${task.id}`"
+        class="text-gray-700 font-semibold font-sans tracking-wide text-sm"
+      >
         {{ task.title }}
-      </p>
+      </router-link>
 
       <img
         class="w-6 h-6 rounded-full ml-3"
