@@ -3,10 +3,12 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useRouter } from "vue-router";
 import BoardCard from "@/components/BoardCard.vue";
 import { getAllBoards, boardCreate } from "@/graphql/boards";
+import { IMAGE_UPLOAD_QUERY } from "@/graphql";
 import { computed } from "vue";
 import useAlert from "@/composables/useAlert";
 const alert = useAlert();
 const router = useRouter();
+const { result: uploadQueryResult } = useQuery(IMAGE_UPLOAD_QUERY);
 
 // Boards List
 const { result, loading, onError } = useQuery(getAllBoards);

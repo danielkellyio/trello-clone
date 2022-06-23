@@ -5,7 +5,12 @@ export const GET_TASK_QUERY = gql`
     task(id: $id) {
       type
       title
-      images
+      images {
+        items {
+          id
+          downloadUrl
+        }
+      }
     }
   }
 `;
