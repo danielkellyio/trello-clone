@@ -7,6 +7,7 @@ provide(DefaultApolloClient, apolloClient);
 
 <template>
   <div class="container">
+    <AppAlerts />
     <RouterView />
   </div>
 </template>

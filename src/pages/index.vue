@@ -3,16 +3,14 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useRouter } from "vue-router";
 import BoardCard from "@/components/BoardCard.vue";
 import { getAllBoards, boardCreate } from "@/graphql/boards";
-import { IMAGE_UPLOAD_QUERY } from "@/graphql";
 import { computed } from "vue";
-import useAlert from "@/composables/useAlert";
-const alert = useAlert();
+import { useAlerts } from "@/stores/Alerts";
+const alerts = useAlerts();
 const router = useRouter();
-const { result: uploadQueryResult } = useQuery(IMAGE_UPLOAD_QUERY);
 
 // Boards List
 const { result, loading, onError } = useQuery(getAllBoards);
-onError(() => alert.danger("Error loading boards"));
+onError(() => alerts.error("Error loading boards"));
 const boards = computed(() => result.value?.boardsList?.items || []);
 
 // Board Create
@@ -23,9 +21,10 @@ const {
   loading: creatingBoard,
 } = useMutation(boardCreate);
 onBoardCreated((res) => {
+  alerts.success("New board created!");
   router.push(`/boards/${res.data.boardCreate.id}?new=1`);
 });
-onBoardError(() => alert.danger("Error creating board"));
+onBoardError(() => alerts.error("Error creating board"));
 const newBoardTemplate = {
   title: "My New Board",
   order: JSON.stringify([

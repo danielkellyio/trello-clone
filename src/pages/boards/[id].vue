@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, toRefs } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
-import useAlert from "@/composables/useAlert";
+import { useAlerts } from "@/stores/Alerts";
 import { useRoute, useRouter } from "vue-router";
 import {
   getBoard,
@@ -12,6 +12,7 @@ import {
 } from "@/graphql/boards";
 import type { Task, Uid } from "@/types";
 
+const alerts = useAlerts();
 const route = useRoute();
 const router = useRouter();
 
@@ -27,8 +28,8 @@ const {
   loading: loadingBoard,
   onError: onBoardError,
 } = useQuery(getBoard, { id: boardId.value });
-const alert = useAlert();
-onBoardError(() => alert.danger("Error loading board"));
+
+onBoardError(() => alerts.error("Error loading board"));
 
 const board = computed(() => boardData.value?.board || null);
 
@@ -42,12 +43,14 @@ const { mutate: updateBoard } = useMutation(updateBoardQuery);
 //handle delete board
 const { mutate: deleteBoard, onError: onErrorDeletingBoard } =
   useMutation(deleteBoardQuery);
-onErrorDeletingBoard(() => alert.danger("Error deleting board"));
+onErrorDeletingBoard(() => alerts.error("Error deleting board"));
 async function deleteBoardIfConfirmed({ id }: { id: Uid }) {
+  const title = board.value.title;
   const yes = confirm("Are you sure you want to delete this board?");
   if (yes) {
     await deleteBoard({ id });
     router.push("/");
+    alerts.success(`${title} successfully deleted`);
   }
 }
 
@@ -76,16 +79,17 @@ function addTask(task: Task) {
 }
 onErrorCreatingTask((error) => {
   taskReject(error);
-  alert.danger("Error creating task");
+  alerts.error("Error creating task");
 });
 onDoneCreatingTask((res) => {
   taskResolve(res.data.boardUpdate.tasks.items[0]);
+  alerts.success("New task created!");
 });
 
 // hanlde delete task
 const { mutate: deleteTask, onError: onDeleteTaskError } =
   useMutation(deleteTaskQuery);
-onDeleteTaskError(() => alert.danger("Error deleting task"));
+onDeleteTaskError(() => alerts.error("Error deleting task"));
 function removeTask(taskId: Uid) {
   deleteTask({ id: taskId });
 }

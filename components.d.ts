@@ -5,7 +5,9 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AppAlerts: typeof import('./src/components/AppAlerts.vue')['default']
     AppLoader: typeof import('./src/components/AppLoader.vue')['default']
+    AppNotifications: typeof import('./src/components/AppNotifications.vue')['default']
     Badge: typeof import('./src/components/Badge.vue')['default']
     BoardCard: typeof import('./src/components/BoardCard.vue')['default']
     BoardColumnHeading: typeof import('./src/components/BoardColumnHeading.vue')['default']

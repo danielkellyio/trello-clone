@@ -2,10 +2,11 @@
 import { ref, toRefs, computed } from "vue";
 import { GET_TASK_QUERY } from "@/graphql/tasks";
 import { useQuery, useMutation } from "@vue/apollo-composable";
-import useAlert from "@/composables/useAlert";
+import { useAlerts } from "@/stores/Alerts";
 import { useStorage } from "@/composables/useStorage";
 import { FILE_CREATE_MUTATION } from "@/graphql";
 
+const alerts = useAlerts();
 const { uploadAsset } = useStorage();
 
 const form = ref({});
@@ -22,8 +23,7 @@ const {
   onError: onTaskError,
   onResult: onTaskLoaded,
 } = useQuery(GET_TASK_QUERY, { id: taskId.value });
-const alert = useAlert();
-onTaskError(() => alert.danger("Error loading task"));
+onTaskError(() => alerts.error("Error loading task"));
 onTaskLoaded(() => (form.value = task.value));
 
 const task = computed(() => taskData.value?.task || null);
