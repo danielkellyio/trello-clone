@@ -14,7 +14,6 @@ const props = defineProps<{
 // events
 const emit = defineEmits<{
   (e: "update", payload: Partial<Board>): void;
-  (e: "delete", payload: { id: Uid }): void;
   (e: "removeTask", payload: { id: Uid }): void;
 }>();
 
@@ -61,12 +60,6 @@ watch(columns, () => {
 </script>
 
 <template>
-  <BoardHeading
-    :board="board"
-    @update="emitUpdateEvent({ title: $event.title })"
-    @delete="$emit('delete', { id: board.id })"
-  />
-
   <div class="flex py-12 items-start">
     <draggable
       :list="columns"

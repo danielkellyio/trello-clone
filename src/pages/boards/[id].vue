@@ -114,13 +114,19 @@ function removeTask(taskId: Uid) {
 </script>
 <template>
   <AppLoader v-if="loadingBoard" />
+  <AppPageHeading
+    :value="board?.title"
+    :editable="true"
+    @update="updateBoard({ ...board, title: $event })"
+  >
+  </AppPageHeading>
+
   <BoardComponent
     v-if="board"
     :board="board"
     :tasks="tasks"
     :addTask="addTask"
     @removeTask="removeTask($event.id)"
-    @delete="deleteBoardIfConfirmed"
     @update="updateBoard($event)"
   />
 </template>

@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { Board, Uid } from "@/types";
 defineProps<{
-  board: Board;
+  editable?: boolean;
+  value?: string;
 }>();
 const emit = defineEmits<{
-  (e: "update", payload: { title: string }): void;
-  (e: "delete", payload: { id: Uid }): void;
+  (e: "update", payload: string): void;
 }>();
 
 function handleUpdate(event: Event) {
   const input = event.target as HTMLInputElement;
-  const title = input.value;
-  emit("update", { title });
+  const value = input.value;
+  emit("update", value);
   input.blur();
 }
 </script>
 <template>
   <input
-    ref="boardTitle"
+    v-if="editable"
     type="text"
-    class="text-3xl w-full"
-    :value="board.title"
+    class="text-3xl w-full mb-5"
+    :value="value"
     @keydown.enter="handleUpdate"
     @blur="handleUpdate"
   />
+  <h1 v-else class="text-3xl mb-5"><slot></slot></h1>
 </template>

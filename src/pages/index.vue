@@ -39,7 +39,7 @@ const newBoardTemplate = {
 
 <template>
   <div v-if="!loading">
-    <h1 class="text-3xl mb-5">Boards</h1>
+    <AppPageHeading>Boards</AppPageHeading>
     <div class="flex">
       <BoardCard v-for="board in boards" :key="board.id" :board="board" />
 

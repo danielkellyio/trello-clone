@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
     AppDrawer: typeof import('./src/components/AppDrawer.vue')['default']
     AppLoader: typeof import('./src/components/AppLoader.vue')['default']
     AppNotifications: typeof import('./src/components/AppNotifications.vue')['default']
+    AppPageHeading: typeof import('./src/components/AppPageHeading.vue')['default']
     Badge: typeof import('./src/components/Badge.vue')['default']
     BoardCard: typeof import('./src/components/BoardCard.vue')['default']
     BoardColumnHeading: typeof import('./src/components/BoardColumnHeading.vue')['default']
