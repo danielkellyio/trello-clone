@@ -12,7 +12,7 @@ const alerts = useAlerts();
   <NotificationGroup
     :style="{
       right: 0,
-      bottom: 0,
+      bottom: '10px',
       alignItems: 'flex-start',
       flexWrap: 'wrap-reverse',
     }"
