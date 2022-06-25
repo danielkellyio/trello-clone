@@ -26,6 +26,10 @@ export const getBoard = gql`
         items {
           id
           title
+          createdAt
+          updatedAt
+          dueAt
+          color
         }
       }
     }
@@ -72,6 +76,10 @@ export const createTaskOnBoardQuery = gql`
           id
           title
           type
+          createdAt
+          updatedAt
+          dueAt
+          color
         }
       }
     }

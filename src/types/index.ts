@@ -11,18 +11,24 @@ export interface ResetPasswordPayload {
   newPassword: string;
 }
 
-export type TaskTypes =
-  | "Design"
-  | "Feature Request"
-  | "Backend"
-  | "QA"
-  | "default";
+type TaskColor =
+  | "red"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "blue"
+  | "purple"
+  | "pink";
 
 export interface Task {
   id: Uid;
   title: string;
   type: string;
+  color: TaskColor;
   board?: Board;
+  createdAt: Date;
+  updatedAt: Date;
+  dueAt: Date;
 }
 export interface Column {
   uid: Uid;

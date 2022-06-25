@@ -15,6 +15,7 @@ declare module '@vue/runtime-core' {
     BoardColumnHeading: typeof import('./src/components/BoardColumnHeading.vue')['default']
     BoardComponent: typeof import('./src/components/BoardComponent.vue')['default']
     BoardHeading: typeof import('./src/components/BoardHeading.vue')['default']
+    BoardMenu: typeof import('./src/components/BoardMenu.vue')['default']
     IssueColumn: typeof import('./src/components/IssueColumn.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

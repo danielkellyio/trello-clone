@@ -28,7 +28,7 @@ const handleEsc = () => {
   <div class="w-full">
     <input
       ref="input"
-      class="w-full bg-transparent border-gray-200 border-[1px] rounded"
+      class="w-full bg-transparent border-gray-200 border-[1px] rounded p-1"
       type="text"
       v-if="active"
       v-model="value"
@@ -39,7 +39,7 @@ const handleEsc = () => {
     <div
       v-else
       @click="handleActivate()"
-      class="hover:bg-gray-300 p-2 rounded text-gray-600 text-sm cursor-pointer"
+      class="hover:bg-gray-300 p-3 rounded text-gray-600 text-sm cursor-pointer"
     >
       + Create Task
     </div>

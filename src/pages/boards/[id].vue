@@ -2,7 +2,8 @@
 import { computed, toRefs } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useAlerts } from "@/stores/Alerts";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+
 import {
   getBoard,
   updateBoardQuery,
@@ -11,9 +12,9 @@ import {
   deleteBoardQuery,
 } from "@/graphql/boards";
 import type { Task, Uid } from "@/types";
+import BoardMenu from "../../components/BoardMenu.vue";
 
 const alerts = useAlerts();
-const route = useRoute();
 const router = useRouter();
 
 // Define Props
@@ -44,11 +45,11 @@ const { mutate: updateBoard } = useMutation(updateBoardQuery);
 const { mutate: deleteBoard, onError: onErrorDeletingBoard } =
   useMutation(deleteBoardQuery);
 onErrorDeletingBoard(() => alerts.error("Error deleting board"));
-async function deleteBoardIfConfirmed({ id }: { id: Uid }) {
+async function deleteBoardIfConfirmed() {
   const title = board.value.title;
   const yes = confirm("Are you sure you want to delete this board?");
   if (yes) {
-    await deleteBoard({ id });
+    await deleteBoard({ id: boardId.value });
     router.push("/");
     alerts.success(`${title} successfully deleted`);
   }
@@ -93,33 +94,19 @@ onDeleteTaskError(() => alerts.error("Error deleting task"));
 function removeTask(taskId: Uid) {
   deleteTask({ id: taskId });
 }
-
-// const route = useRoute();
-// const router = useRouter();
-
-// const boardTitle = ref(null);
-
-// onMounted(focusTitle);
-// watch(board.loaded, focusTitle);
-
-// function focusTitle() {
-//   route.query.new && boardTitle.value && boardTitle.value.focus();
-// }
-// async function handleDelete() {
-//   const yes = confirm(`Are you sure you want to delete ${board.title}`);
-//   if (!yes) return;
-//   await board.deleteBoard();
-//   router.push("/");
-// }
 </script>
 <template>
   <AppLoader v-if="loadingBoard" />
-  <AppPageHeading
-    :value="board?.title"
-    :editable="true"
-    @update="updateBoard({ ...board, title: $event })"
-  >
-  </AppPageHeading>
+  <div class="flex">
+    <AppPageHeading
+      class="mb-0"
+      :value="board?.title"
+      :editable="true"
+      @update="updateBoard({ ...board, title: $event })"
+    >
+    </AppPageHeading>
+    <BoardMenu @deleteBoard="deleteBoardIfConfirmed" />
+  </div>
 
   <BoardComponent
     v-if="board"
