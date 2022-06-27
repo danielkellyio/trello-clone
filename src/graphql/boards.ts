@@ -9,6 +9,9 @@ export const getAllBoards = gql`
         title
         updatedAt
         createdAt
+        image {
+          downloadUrl
+        }
       }
     }
   }

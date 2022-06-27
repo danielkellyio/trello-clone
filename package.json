@@ -22,6 +22,7 @@
     "@progress/kendo-theme-default": "^5.5.0",
     "@progress/kendo-vue-animation": "^3.4.0",
     "@progress/kendo-vue-buttons": "^3.4.0",
+    "@progress/kendo-vue-indicators": "^3.4.0",
     "@progress/kendo-vue-layout": "^3.4.0",
     "@progress/kendo-vue-notification": "^3.4.0",
     "@progress/kendo-vue-popup": "^3.4.0",

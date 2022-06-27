@@ -112,7 +112,7 @@ function removeTask(taskId: Uid) {
 }
 </script>
 <template>
-  <AppLoader v-if="loadingBoard" />
+  <AppLoader v-if="loadingBoard" :overlay="true" />
   <template v-if="board">
     <div class="flex">
       <AppPageHeading

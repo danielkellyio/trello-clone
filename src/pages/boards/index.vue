@@ -49,5 +49,5 @@ const newBoardTemplate = {
       </button>
     </div>
   </div>
-  <AppLoader v-if="loading" />
+  <AppLoader v-if="loading" :overlay="true" />
 </template>
