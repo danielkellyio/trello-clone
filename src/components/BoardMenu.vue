@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Popup as KPopup } from "@progress/kendo-vue-popup";
 import { Button as KButton } from "@progress/kendo-vue-buttons";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import type { Board } from "@/types";
 
@@ -12,7 +12,7 @@ const props = defineProps<{
 
 const show = ref(false);
 const menu = ref(null);
-onClickOutside(menu, (e) => (show.value = false));
+onClickOutside(menu, () => setTimeout(() => (show.value = false), 2));
 defineEmits<{
   (e: "deleteBoard", payload: null): void;
   (e: "uploadImage", payload: { id: string }): void;
