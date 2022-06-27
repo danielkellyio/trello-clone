@@ -7,6 +7,7 @@ import type { Board } from "@/types";
 
 const props = defineProps<{
   board: Board;
+  imageLoading?: boolean;
 }>();
 
 const show = ref(false);
@@ -51,6 +52,7 @@ defineEmits<{
           <li>
             <strong>Board Image</strong>
             <AppImageDropzone
+              :loading="imageLoading"
               @upload="$emit('uploadImage', $event)"
               class="aspect-video w-56"
               :image="board.image?.downloadUrl"

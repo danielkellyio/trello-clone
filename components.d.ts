@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
     AppDrawer: typeof import('./src/components/AppDrawer.vue')['default']
     AppFileDropzone: typeof import('./src/components/AppFileDropzone.vue')['default']
     AppFilePreview: typeof import('./src/components/AppFilePreview.vue')['default']
+    AppImage: typeof import('./src/components/AppImage.vue')['default']
     AppImageDropzone: typeof import('./src/components/AppImageDropzone.vue')['default']
     AppImagePreview: typeof import('./src/components/AppImagePreview.vue')['default']
     AppLoader: typeof import('./src/components/AppLoader.vue')['default']

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, toRefs } from "vue";
+import { computed, toRefs, ref } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useAlerts } from "@/stores/Alerts";
 import { useRouter } from "vue-router";
@@ -13,7 +13,7 @@ import {
   deleteBoardQuery,
   ATTACH_IMAGE_TO_BOARD_MUTATION,
 } from "@/graphql/boards";
-import type { Task, Uid } from "@/types";
+import type { Board, Task, Uid } from "@/types";
 import BoardMenu from "../../components/BoardMenu.vue";
 
 const alerts = useAlerts();
@@ -35,7 +35,7 @@ const {
 
 onBoardError(() => alerts.error("Error loading board"));
 
-const board = computed(() => boardData.value?.board || null);
+const board = computed((): Board | null => boardData.value?.board || null);
 
 //****************************** */
 // Board CRUD
@@ -49,7 +49,7 @@ const { mutate: deleteBoard, onError: onErrorDeletingBoard } =
   useMutation(deleteBoardQuery);
 onErrorDeletingBoard(() => alerts.error("Error deleting board"));
 async function deleteBoardIfConfirmed() {
-  const title = board.value.title;
+  const title = board.value?.title;
   const yes = confirm("Are you sure you want to delete this board?");
   if (yes) {
     await deleteBoard({ id: boardId.value });
@@ -58,11 +58,14 @@ async function deleteBoardIfConfirmed() {
   }
 }
 
-// handle board image
+//****************************** */
+// Board Image
+//****************************** */
 const {
   mutate: attachImageToBoard,
   onError: errorAttachingImage,
   onDone: onImageAttached,
+  loading: imageLoading,
 } = useMutation(ATTACH_IMAGE_TO_BOARD_MUTATION);
 errorAttachingImage(() => {
   alerts.error("Error setting board image");
@@ -124,6 +127,7 @@ function removeTask(taskId: Uid) {
       </AppPageHeading>
       <BoardMenu
         :board="board"
+        :imageLoading="imageLoading"
         @deleteBoard="deleteBoardIfConfirmed"
         @uploadImage="
           attachImageToBoard({

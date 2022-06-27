@@ -6,6 +6,7 @@ import useStorage from "@/composables/useStorage";
 const props = defineProps<{
   placeholder?: string;
   image?: string;
+  loading?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -15,6 +16,7 @@ const emit = defineEmits<{
 // data
 const image = ref(props.image);
 const dropZoneRef = ref(null);
+const uploadingToFilestack = ref(false);
 
 // functions
 
@@ -30,8 +32,10 @@ function onDrop(files: File[] | null) {
 async function handleFiles(files: FileList | File[] | null) {
   if (!files) return;
   image.value = files[0];
+  uploadingToFilestack.value = true;
   const res = await uploadAsset(files[0]);
   emit("upload", res?.data.fileCreate);
+  uploadingToFilestack.value = false;
 }
 
 const { isOverDropZone } = useDropZone(dropZoneRef, onDrop);
@@ -54,9 +58,11 @@ const { isOverDropZone } = useDropZone(dropZoneRef, onDrop);
         @change="onFileSelect"
       />
     </label>
-    <AppImagePreview v-if="image" :image="image" />
+    <AppImage v-if="image" :src="image" />
     <template v-else>{{
       placeholder || "Click or drop to upload image"
     }}</template>
+
+    <AppLoader v-if="loading || uploadingToFilestack" :overlay="true" />
   </div>
 </template>
