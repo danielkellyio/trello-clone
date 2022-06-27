@@ -3,6 +3,7 @@ import { computed, toRefs } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useAlerts } from "@/stores/Alerts";
 import { useRouter } from "vue-router";
+import useStorage from "@/composables/useStorage";
 
 import {
   getBoard,
@@ -10,12 +11,14 @@ import {
   createTaskOnBoardQuery,
   deleteTaskQuery,
   deleteBoardQuery,
+  ATTACH_IMAGE_TO_BOARD_MUTATION,
 } from "@/graphql/boards";
 import type { Task, Uid } from "@/types";
 import BoardMenu from "../../components/BoardMenu.vue";
 
 const alerts = useAlerts();
 const router = useRouter();
+useStorage();
 
 // Define Props
 const props = defineProps<{
@@ -54,6 +57,19 @@ async function deleteBoardIfConfirmed() {
     alerts.success(`${title} successfully deleted`);
   }
 }
+
+// handle board image
+const {
+  mutate: attachImageToBoard,
+  onError: errorAttachingImage,
+  onDone: onImageAttached,
+} = useMutation(ATTACH_IMAGE_TO_BOARD_MUTATION);
+errorAttachingImage(() => {
+  alerts.error("Error setting board image");
+});
+onImageAttached(() => {
+  alerts.success("Board image successfully set");
+});
 
 //****************************** */
 // Tasks CRUD
@@ -97,23 +113,33 @@ function removeTask(taskId: Uid) {
 </script>
 <template>
   <AppLoader v-if="loadingBoard" />
-  <div class="flex">
-    <AppPageHeading
-      class="mb-0"
-      :value="board?.title"
-      :editable="true"
-      @update="updateBoard({ ...board, title: $event })"
-    >
-    </AppPageHeading>
-    <BoardMenu @deleteBoard="deleteBoardIfConfirmed" />
-  </div>
+  <template v-if="board">
+    <div class="flex">
+      <AppPageHeading
+        class="mb-0"
+        :value="board?.title"
+        :editable="true"
+        @update="updateBoard({ ...board, title: $event })"
+      >
+      </AppPageHeading>
+      <BoardMenu
+        :board="board"
+        @deleteBoard="deleteBoardIfConfirmed"
+        @uploadImage="
+          attachImageToBoard({
+            id: boardId,
+            imageId: $event.id,
+          })
+        "
+      />
+    </div>
 
-  <BoardComponent
-    v-if="board"
-    :board="board"
-    :tasks="tasks"
-    :addTask="addTask"
-    @removeTask="removeTask($event.id)"
-    @update="updateBoard($event)"
-  />
+    <BoardComponent
+      :board="board"
+      :tasks="tasks"
+      :addTask="addTask"
+      @removeTask="removeTask($event.id)"
+      @update="updateBoard($event)"
+    />
+  </template>
 </template>

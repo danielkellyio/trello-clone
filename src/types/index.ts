@@ -5,6 +5,28 @@ export interface EmailAndPassword {
   password: string;
 }
 
+export interface File {
+  downloadStorageUrl: string;
+  downloadUrl: string;
+  filename: string;
+  id: string;
+  meta: {
+    path: string;
+    size: number;
+    mimetype: string;
+    workspaceId: string;
+  };
+  previewUrl: string;
+  provider: string;
+  public: boolean;
+  shareUrl: string;
+  updatedAt: Date;
+  uploadUrl: string;
+  uploaded: boolean;
+  createdAt: Date;
+  deletedAt: Date;
+}
+
 export interface ResetPasswordPayload {
   oobCode: string;
   uid: Uid;
@@ -43,6 +65,7 @@ export interface Board {
   title: string;
   id: Uid;
   order: string | Column[] | ColumnWithTasks[];
+  image?: File;
 }
 
 export interface PartialBoard {

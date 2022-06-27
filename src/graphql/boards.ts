@@ -22,6 +22,10 @@ export const getBoard = gql`
       order
       createdAt
       updatedAt
+      image {
+        id
+        downloadUrl
+      }
       tasks {
         items {
           id
@@ -60,6 +64,20 @@ export const deleteBoardQuery = gql`
   mutation deleteBoard($id: ID!) {
     boardDelete(filter: { id: $id }, force: true) {
       success
+    }
+  }
+`;
+
+export const ATTACH_IMAGE_TO_BOARD_MUTATION = gql`
+  mutation attachImageToBoard($id: ID!, $imageId: ID!) {
+    boardUpdate(
+      filter: { id: $id }
+      data: { image: { reconnect: { id: $imageId } } }
+    ) {
+      image {
+        id
+        downloadUrl
+      }
     }
   }
 `;

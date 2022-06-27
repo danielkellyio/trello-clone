@@ -7,6 +7,10 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AppAlerts: typeof import('./src/components/AppAlerts.vue')['default']
     AppDrawer: typeof import('./src/components/AppDrawer.vue')['default']
+    AppFileDropzone: typeof import('./src/components/AppFileDropzone.vue')['default']
+    AppFilePreview: typeof import('./src/components/AppFilePreview.vue')['default']
+    AppImageDropzone: typeof import('./src/components/AppImageDropzone.vue')['default']
+    AppImagePreview: typeof import('./src/components/AppImagePreview.vue')['default']
     AppLoader: typeof import('./src/components/AppLoader.vue')['default']
     AppNotifications: typeof import('./src/components/AppNotifications.vue')['default']
     AppPageHeading: typeof import('./src/components/AppPageHeading.vue')['default']
