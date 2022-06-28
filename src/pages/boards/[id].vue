@@ -4,6 +4,7 @@ import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useAlerts } from "@/stores/Alerts";
 import { useRouter } from "vue-router";
 import useStorage from "@/composables/useStorage";
+import { refDebounced } from "@vueuse/core";
 
 import {
   getBoard,
@@ -30,7 +31,9 @@ const {
   result: boardData,
   loading: loadingBoard,
   onError: onBoardError,
+  refetch: refetchBoard,
 } = useQuery(getBoard, { id: boardId.value });
+const loadingBoardDebounced = refDebounced(loadingBoard, 1000);
 
 onBoardError(() => alerts.error("Error loading board"));
 
@@ -70,6 +73,7 @@ errorAttachingImage(() => {
   alerts.error("Error setting board image");
 });
 onImageAttached(() => {
+  refetchBoard();
   alerts.success("Board image successfully set");
 });
 
@@ -115,7 +119,7 @@ function removeTask(taskId: Uid) {
 </script>
 <template>
   <div>
-    <AppLoader v-if="loadingBoard" :overlay="true" />
+    <AppLoader v-if="loadingBoardDebounced" :overlay="true" />
     <template v-if="board">
       <div class="flex">
         <AppPageHeading
