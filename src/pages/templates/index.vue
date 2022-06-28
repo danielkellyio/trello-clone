@@ -32,7 +32,8 @@ const templates = [
 </script>
 <template>
   <div class="flex">
-    <KCard
+    <AppPageHeading>Templates</AppPageHeading>
+    <!-- <KCard
       v-for="template in templates"
       :key="template.title"
       class="block w-96"
@@ -40,6 +41,6 @@ const templates = [
       <KCardTitle class="p-2">
         <span class="text-gray-700 text-xl">{{ template.title }}</span>
       </KCardTitle>
-    </KCard>
+    </KCard> -->
   </div>
 </template>

@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { Drawer, DrawerContent } from "@progress/kendo-vue-layout";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import { ref, computed } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 
 const router = useRouter();
+const route = useRoute();
 
 const expanded = useLocalStorage("app-drawer-expanded", false);
 const expandedIcon = computed(() =>
@@ -14,7 +15,7 @@ const items = computed(() => [
   {
     text: "Boards",
     icon: "k-i-set-column-position",
-    selected: true,
+    selected: route.fullPath.startsWith("/boards"),
     data: {
       path: "/",
     },
@@ -23,6 +24,7 @@ const items = computed(() => [
   {
     text: "Templates",
     icon: "k-i-border-left",
+    selected: route.fullPath === "/templates",
     data: {
       path: "/templates",
     },
@@ -30,6 +32,7 @@ const items = computed(() => [
   {
     text: "Settings",
     icon: "k-i-gear",
+    selected: route.fullPath === "/settings",
     data: {
       path: "/settings",
     },
