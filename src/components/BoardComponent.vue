@@ -51,7 +51,7 @@ function removeTask({ column, task }: { column: Column; task: Task }) {
   emit("removeTask", { id: task.id });
 }
 function emitUpdateEvent(b: Partial<Board>) {
-  emit("update", cloneDeep({ ...board, ...b }));
+  emit("update", cloneDeep({ ...props.board, ...b }));
 }
 
 watch(columns, () => {
