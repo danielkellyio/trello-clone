@@ -15,7 +15,7 @@ const props = defineProps<{
 const date = useDateFormat(props.task.dueAt, "MM/DD");
 </script>
 <template>
-  <RouterLink :to="`/tasks/${task.id}`">
+  <RouterLink :to="`/boards/${$route.params.id}/tasks/${task.id}`">
     <Card>
       <CardHeader>
         <div

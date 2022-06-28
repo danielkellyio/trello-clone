@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, toRefs, ref } from "vue";
+import { computed, toRefs } from "vue";
 import { useQuery, useMutation } from "@vue/apollo-composable";
 import { useAlerts } from "@/stores/Alerts";
 import { useRouter } from "vue-router";
@@ -14,7 +14,6 @@ import {
   ATTACH_IMAGE_TO_BOARD_MUTATION,
 } from "@/graphql/boards";
 import type { Board, Task, Uid } from "@/types";
-import BoardMenu from "../../components/BoardMenu.vue";
 
 const alerts = useAlerts();
 const router = useRouter();
@@ -115,35 +114,39 @@ function removeTask(taskId: Uid) {
 }
 </script>
 <template>
-  <AppLoader v-if="loadingBoard" :overlay="true" />
-  <template v-if="board">
-    <div class="flex">
-      <AppPageHeading
-        class="mb-0"
-        :value="board?.title"
-        :editable="true"
-        @update="updateBoard({ ...board, title: $event })"
-      >
-      </AppPageHeading>
-      <BoardMenu
-        :board="board"
-        :imageLoading="imageLoading"
-        @deleteBoard="deleteBoardIfConfirmed"
-        @uploadImage="
-          attachImageToBoard({
-            id: boardId,
-            imageId: $event.id,
-          })
-        "
-      />
-    </div>
+  <div>
+    <AppLoader v-if="loadingBoard" :overlay="true" />
+    <template v-if="board">
+      <div class="flex">
+        <AppPageHeading
+          class="mb-0"
+          :value="board?.title"
+          :editable="true"
+          @update="updateBoard({ ...board, title: $event })"
+        >
+        </AppPageHeading>
+        <BoardMenu
+          :board="board"
+          :imageLoading="imageLoading"
+          @deleteBoard="deleteBoardIfConfirmed"
+          @uploadImage="
+            attachImageToBoard({
+              id: boardId,
+              imageId: $event.id,
+            })
+          "
+        />
+      </div>
 
-    <BoardComponent
-      :board="board"
-      :tasks="tasks"
-      :addTask="addTask"
-      @removeTask="removeTask($event.id)"
-      @update="updateBoard($event)"
-    />
-  </template>
+      <BoardComponent
+        :board="board"
+        :tasks="tasks"
+        :addTask="addTask"
+        @removeTask="removeTask($event.id)"
+        @update="updateBoard($event)"
+      />
+
+      <RouterView />
+    </template>
+  </div>
 </template>

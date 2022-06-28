@@ -45,8 +45,10 @@ type TaskColor =
 export interface Task {
   id: Uid;
   title: string;
+  description: string;
   type: string;
   color: TaskColor;
+  labels: Label[];
   board?: Board;
   createdAt: Date;
   updatedAt: Date;
@@ -63,21 +65,18 @@ export interface ColumnWithTasks extends Column {
 
 export interface Board {
   title: string;
-  id: Uid;
+  id: string;
   order: string | Column[] | ColumnWithTasks[];
   image?: File;
 }
 
-export interface PartialBoard {
-  title?: string;
-  uid?: Uid;
-  order?: Column[] | ColumnWithTasks[];
+export interface Comment {
+  id: string;
+  message: string;
 }
 
-export interface PartialTask {
-  uid?: Uid;
-  boardUid?: Uid;
-  title?: string;
-  type?: string;
-  date?: Date;
+export interface Label {
+  id: string;
+  label: string;
+  color: TaskColor;
 }

@@ -113,3 +113,42 @@ export const deleteTaskQuery = gql`
     }
   }
 `;
+
+export const GET_BOARD_LABELS_QUERY = gql`
+  query getBoardLabels($id: ID) {
+    board(id: $id) {
+      labels {
+        items {
+          id
+          label
+          color
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_LABEL_ON_BOARD = gql`
+  mutation createLabelOnBoard($boardId: ID!, $label: String!, $color: String) {
+    boardUpdate(
+      filter: { id: $boardId }
+      data: { labels: { create: [{ label: $label, color: $color }] } }
+    ) {
+      id
+      labels(last: 1) {
+        items {
+          id
+          label
+          color
+        }
+      }
+    }
+  }
+`;
+export const DELETE_BOARD_LABEL = gql`
+  mutation deleteLabel($id: ID!) {
+    labelDelete(filter: { id: $id }, force: true) {
+      success
+    }
+  }
+`;

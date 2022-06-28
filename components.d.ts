@@ -6,6 +6,7 @@ import '@vue/runtime-core'
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AppAlerts: typeof import('./src/components/AppAlerts.vue')['default']
+    AppColorInput: typeof import('./src/components/AppColorInput.vue')['default']
     AppDrawer: typeof import('./src/components/AppDrawer.vue')['default']
     AppFileDropzone: typeof import('./src/components/AppFileDropzone.vue')['default']
     AppFilePreview: typeof import('./src/components/AppFilePreview.vue')['default']
@@ -20,13 +21,18 @@ declare module '@vue/runtime-core' {
     BoardColumnHeading: typeof import('./src/components/BoardColumnHeading.vue')['default']
     BoardComponent: typeof import('./src/components/BoardComponent.vue')['default']
     BoardHeading: typeof import('./src/components/BoardHeading.vue')['default']
+    BoardLabels: typeof import('./src/components/BoardLabels.vue')['default']
     BoardMenu: typeof import('./src/components/BoardMenu.vue')['default']
     IssueColumn: typeof import('./src/components/IssueColumn.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SaveableInput: typeof import('./src/components/SaveableInput.vue')['default']
     TaskCard: typeof import('./src/components/TaskCard.vue')['default']
+    TaskComments: typeof import('./src/components/TaskComments.vue')['default']
     TaskCreator: typeof import('./src/components/TaskCreator.vue')['default']
+    TaskDialog: typeof import('./src/components/TaskDialog.vue')['default']
     TaskEditor: typeof import('./src/components/TaskEditor.vue')['default']
+    TaskLabels: typeof import('./src/components/TaskLabels.vue')['default']
     TheNavbar: typeof import('./src/components/TheNavbar.vue')['default']
   }
 }

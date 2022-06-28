@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Popup as KPopup } from "@progress/kendo-vue-popup";
 import { Button as KButton } from "@progress/kendo-vue-buttons";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import { onClickOutside } from "@vueuse/core";
 import type { Board } from "@/types";
+import BoardLabels from "./BoardLabels.vue";
 
 const props = defineProps<{
   board: Board;
@@ -57,6 +58,10 @@ defineEmits<{
               class="aspect-video w-56"
               :image="board.image?.downloadUrl"
             />
+          </li>
+          <li>
+            <strong>Board Labels</strong>
+            <BoardLabels :board-id="board.id" />
           </li>
         </ul>
       </div>
